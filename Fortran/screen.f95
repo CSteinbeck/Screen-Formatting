@@ -2,10 +2,9 @@
 !!Screen formatting using Fortran
 program Screen
  !!Define Globals
-character(:), allocatable :: long_string, word, line
-
+character(:), allocatable :: long_string, word, line, lineMin, lineMax
 integer :: charCount, lineCount, i, j, wordCount, filesize
-real, dimension(0:60) :: min_size, max_size
+!!real, dimension(0:60) :: min_size, max_size
 
 !!Calling subroutines (functions)
 interface
@@ -26,7 +25,8 @@ end interface
 
 !!Main Program
 call read_file(long_string,filesize)
-!!long_string = FormatNum(long_string)
+long_string = FormatNum(long_string)
+!!print*, long_string
 
 line=""
 i=1
@@ -46,22 +46,45 @@ do while(j .ne. filesize + 1)
         line =line//trim(adjustl(word))  !!Appending the new word to the blank line
         if(charCount .lt. 60) then
         line =line // " "
-        charCount= charCount + 1;
+        charCount= charCount + 1
+        i=j
         endif
         charCount= charCount+len(trim(word))
-        i=j
+        
     else
-        print*,line
-        charCount=0
-        line=""
-        lineCount= lineCount+1
-        wordCount=0
+        if(lineCount .eq. 1) then
+            lineMin = lineMin // line
+            lineMax = lineMax // line
+        endif
+        !!Max Check
+        if(len(line) .le. len(lineMax)) then
+            lineMax =  line
+        endif
+        !!!!! Min Check
+        if(len(line) .le. len(lineMin)) then
+            lineMin = line
+        endif  
+    print*,line
+    charCount=0
+    line=""
+    lineCount= lineCount+1
+    wordCount=0
     endif
     deallocate(word)
 
   endif
     j=j+1
 enddo
+    if(len(line) .ge. len(lineMax)) then
+        lineMax =  line
+    endif
+    !!!!! Min Check
+    if(len(line) .le. len(lineMin)) then
+        lineMin =line
+    endif
+print*,line
+print*, "Here is the longest line:", lineMax
+print*, "Here is the shortest line:", lineMin
 end program Screen
 
 !!Subroutine Definitions!!
@@ -95,13 +118,17 @@ end subroutine read_file
 
 function FormatNum(in) result(out)
 character(*),intent(in) :: in
-character(:), allocatable :: out, string, Fstring
+character(:), allocatable :: out, tempString, Fstring
 integer :: index, findex
-string=in
-Fstring=in
-do while(index .le. len(string))
-    if((iachar(string(index:index)) .le. 47) .or. (iachar(string(index:index)) .ge. 58)) then
-         Fstring(findex:findex) = string(index:index) !!
+
+tempString=in
+allocate(character(len(tempString)) :: Fstring)
+index = 1
+findex = 1
+do while(index .le. len(tempString))
+    !!Ignores numbers 0-9
+    if ( iachar(tempString(index:index)) .le. 47 .or. iachar(tempString(index:index)) .ge. 58) then
+         Fstring(findex:findex) = tempString(index:index) !!
          findex=findex+1
     endif
     index= index + 1
