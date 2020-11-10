@@ -5,11 +5,12 @@
 (defvar instance "");;Char item that is monitored
 (defvar i 0) ;;Sets the index to zero for looping
 (defvar j 0)
-(defvar words)
+(defvar index 0)
+(defvar word "")
 (defvar long_string)
 (defvar line "") ;;line item that the chars are inserted into
-(defvar lineMin)
-(defvar lineMax)
+(defvar lineMin "")
+(defvar lineMax "")
 (defvar charCount 0) ;;# of chars taken in
 (defvar lineCount 1);; # of lines counted 
 (defvar wordcount 0) ;; Word count for the new line
@@ -25,13 +26,22 @@
                               (progn
                               ;;(write-line "Test")
                               (setf (aref long_string i) instance)
-                              (incf i)
-                              (princ instance) 
-                              ))
-                       )            
+                              (incf i)))
+                        )            
             )
 
-;;(write instance)          
+                  (loop until (= index (length long_string))
+                        do
+                        (cond ((char= #\space (aref long_string index))
+                        (progn(setf word (subseq long_string j index))
+                        (cond(<= (+charCount))
+                        )))
+                        (print word)
+                        (incf index)
+                  )
+
+
+          
 ;;(format t "~a" line)
 (close fl)
 ;;(format t "The number of lines is ~2d" lineCount)
