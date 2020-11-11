@@ -3,7 +3,7 @@
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT OriginalInput ASSIGN TO "./test.txt"
+           SELECT OriginalInput ASSIGN TO filename
                ORGANIZATION IS LINE SEQUENTIAL.
        
        DATA DIVISION.
@@ -17,8 +17,8 @@
               03 Middlename    PIC X(20).
        WORKING-STORAGE SECTION.
        01 END-OF-FILE PIC Z(1).
-
-       PROCEDURE DIVISION.
+       01 filename PIC X(60).
+       PROCEDURE DIVISION CHAINING filename.
        Begin.
           OPEN INPUT OriginalInput
           READ OriginalInput

@@ -1,0 +1,69 @@
+#!/usr/bin/sbcl --script
+;;;Colton Steinbeck
+;;;Screen Formatting in Lisp;;;
+(defvar fl) ;; Command-Line arg that will be looped through
+(defvar instance) ;;Char item that is monitored
+(defvar i 0) ;;Sets the index to zero for looping
+(defvar j 0)
+(defvar words)
+(defvar long_string)
+(defvar line) ;;line item that the chars are inserted into
+(defvar lineMin)
+(defvar lineMax)
+(defvar charCount 0) ;;# of chars taken in
+(defvar lineCount 1);; # of lines counted 
+(defvar wordcount 0) ;; Word count for the new line
+;;;;;;;;;;;;;;
+;;;;;;;;;;;Input Sequence for the file
+(setq fl (open (car(cdr *posix-argv* ) ) ) );;;;;;;;;;;;Opens the given file that the user inputs
+(setq long_string (make-string (file-length fl))) ;;Sets the new string size to the size of the originalFile
+(setq line(length long_string))
+           (loop for instance = (read-char fl nil :eof) ; stream, no error, :eof value
+                  until (eq instance :eof)
+                        do
+                        (cond(or (char> instance #\9 ) (char< instance #\0 ) )
+                              (progn
+                                    (setf (aref long_string i) instance) ;;Inserts the instance (non-number) to insert into the line[index]
+                                    (incf i) ;;increases the index to the end of the line     
+                              )
+                              (if (char= (aref long_string i) #\space ) ;;If there exists a space in the file
+                                    (progn
+                                          (setf (subseq long_string j i) words ) ;;Creates the word from the select characters (setf, string=, coerce)
+                                          (string-left-trim " " words) ;; Trims spaces
+                                          (string-right-trim " " words) ;; Trims spaces 
+                                    )
+                                          (if (<= (+ charCount (length words) ) 60) ;;While the charcount is less that 60
+                                                (progn
+                                                (+ wordcount 1)
+                                                (concatenate  'string line words)
+                                                )
+                                          )
+                                          if(<= charCount 60)
+                                          (
+                                                (= (+ charCount 1) charCount)
+                                          )
+                                                (= (+ charCount (length word)) charCount) ;;increments the charCount with the new length of the word
+                                                (= j i)
+                                                (concatenate 'string line #\space ) ;;Adds a space to the line
+                                    
+                                    (if ( = lineCount 1)
+                                          (progn
+                                          (concatenate 'string lineMax line)
+                                          (concatenate 'string lineMin line)
+                                          )
+                                    )
+
+                              
+                              )
+                              
+                        )
+
+
+            )
+
+(write words)          
+;;(format t "~a" line)
+(close fl)
+;;(format t "The number of lines is ~2d" lineCount)
+;;(terpri)
+;;(close fl)
