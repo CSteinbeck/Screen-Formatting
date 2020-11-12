@@ -45,17 +45,18 @@
                                     ;;
                                     
                               );;end of progn
-                              (setf charCount (+ (length ModLine)(length word1)))
-                              (if(<= charCount 60)
+                              (setf charCount (+ (length ModLine)(length word1))) ;;Defining the charCount as the charCount + length of the word
+                              (if(<= charCount 60) ;;If the charCount is less than 60
                                     (progn
-                                    (setf wordcount (+ wordcount 1))
-                                    (setf ModLine (concatenate 'string ModLine(string word1)))
+                                    (setf wordcount (+ wordcount 1)) ;;increment word count
+                                    (setf ModLine (concatenate 'string ModLine(string word1))) ;;Concatenates the word to the ModLine (line object)
                                     (if(< charCount 60)
                                           (setf ModLine (concatenate 'string ModLine(string " ")))
+                                          (setf charCount (+ charCount 1)) ;; 
                                     )
-                                    (setf j index)   
+                                    (setf j index) ;;Resets the index  
                               )
-                              (setf charCount (+ charCount (length word1)))
+                              (setf charCount (+ charCount (length word1))) ;;Resets the charCount
                               
                               )
                                 

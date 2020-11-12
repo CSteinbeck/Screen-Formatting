@@ -10,10 +10,10 @@
        FILE SECTION.
        FD OriginalInput.
        01 CustomerDetails.
-          02  CustomerId       PIC X(10).
+          02  Word1       PIC X(10).
           02  CustomerName.
-              03 Lastname      PIC X(20).
-              03 Firstname     PIC X(20).
+              03 Word2      PIC X(20).
+              03 Word3     PIC X(20).
               03 Middlename    PIC X(20).
        WORKING-STORAGE SECTION.
        01 END-OF-FILE PIC Z(1).
@@ -32,7 +32,7 @@
           MOVE 0 TO END-OF-FILE.
           
           PERFORM UNTIL END-OF-FILE = 1
-             DISPLAY CustomerId SPACE Lastname SPACE Firstname
+             DISPLAY Word1 SPACE Word2 SPACE Word3
              READ OriginalInput
                 AT END MOVE 1 TO END-OF-FILE
              END-READ
